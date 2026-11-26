@@ -81,7 +81,7 @@
                     android:layout_marginTop="10dp"
                     android:orientation="horizontal">
 
-                    <Button
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/hares_paste_button"
                         style="@style/Widget.Material3.Button.OutlinedButton"
                         android:layout_width="0dp"
@@ -89,7 +89,7 @@
                         android:layout_weight="1"
                         android:text="لصق الرابط" />
 
-                    <Button
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/hares_scan_button"
                         style="@style/Widget.Material3.Button"
                         android:layout_width="0dp"
@@ -153,7 +153,7 @@
                     android:textSize="13sp"
                     android:gravity="end" />
 
-                <Button
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/hares_clear_history_button"
                     style="@style/Widget.Material3.Button.OutlinedButton"
                     android:layout_width="match_parent"
