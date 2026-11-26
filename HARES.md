@@ -28,3 +28,6 @@ This project is based on the upstream Rethink DNS & Firewall project by Celzero 
 ## Build the installable APK
 
 The repository includes an Android CI workflow that runs lint, HARES URL scanner regression tests, and builds a universal debug APK artifact named `HARES-ANDROID-UNIVERSAL-APK`. GitHub may require the repository owner to enable Actions for a newly created fork before the first workflow run. The artifact is intended for device testing; a stable production signing key must be configured before distributing upgradeable release builds.
+
+
+Build trigger: Android CI is enabled; this documentation commit starts a fresh validation build.
