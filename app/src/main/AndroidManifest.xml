@@ -57,6 +57,18 @@
         android:networkSecurityConfig="@xml/network_security_config"
         tools:ignore="ForegroundServicePermission">
 
+        <activity
+            android:name=".ui.activity.HaresSecurityActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:label="@string/hares_security_center">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity>
+
         <service
             android:name=".service.BraveVPNService"
             android:exported="true"
