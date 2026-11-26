@@ -2,6 +2,11 @@
 
 HARES is the branded Android build of this fork of Rethink DNS & Firewall.
 
+## Android compatibility
+
+- The current upstream Android minimum is API 23 (Android 6.0); this fork keeps that minimum.
+- The HARES Android application ID is `com.hares.security`; the internal Kotlin namespace remains the upstream namespace to preserve integration with the Rethink source.
+
 ## Native components
 
 - The underlying Rethink engine remains responsible for Android's local VPN, DNS filtering, firewall rules, per-app network controls, and connection tracking.
