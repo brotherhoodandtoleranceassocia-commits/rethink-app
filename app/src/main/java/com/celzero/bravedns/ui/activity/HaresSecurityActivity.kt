@@ -12,6 +12,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import android.view.View
 import com.celzero.bravedns.R
 import com.celzero.bravedns.hares.HaresNotifications
 import com.celzero.bravedns.hares.HaresThreatEvent
@@ -20,6 +21,7 @@ import com.celzero.bravedns.hares.HaresUrlScanner
 import com.celzero.bravedns.service.PersistentState
 import com.celzero.bravedns.ui.BaseActivity
 import com.celzero.bravedns.util.Themes
+import com.celzero.bravedns.util.SnackbarHelper.applyTopInsetOnly
 import org.koin.android.ext.android.inject
 
 class HaresSecurityActivity : BaseActivity(R.layout.activity_hares_security) {
@@ -36,6 +38,7 @@ class HaresSecurityActivity : BaseActivity(R.layout.activity_hares_security) {
     override fun onCreate(savedInstanceState: Bundle?) {
         theme.applyStyle(Themes.getCurrentTheme(isDarkThemeOn(), persistentState.theme), true)
         super.onCreate(savedInstanceState)
+        findViewById<View>(R.id.hares_root).applyTopInsetOnly()
         store = HaresThreatStore(this)
         linkInput = findViewById(R.id.hares_link_input)
         resultText = findViewById(R.id.hares_scan_result)
