@@ -463,6 +463,9 @@ class HomeScreenFragment : Fragment(R.layout.fragment_home_screen) {
 
     private fun initializeClickListeners() {
         setupFirewallRulesCard()
+        b.haresSecurityShortcut.setOnClickListener {
+            startActivity(Intent(requireContext(), HaresSecurityActivity::class.java))
+        }
 
         b.fhsCardAppsCv.setOnClickListener {
             Logger.v(LOG_TAG_UI, "$TAG: click event on apps card")
