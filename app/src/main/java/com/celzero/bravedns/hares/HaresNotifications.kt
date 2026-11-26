@@ -21,7 +21,7 @@ object HaresNotifications {
         val title = if (event.level == HaresThreatEvent.Level.HIGH) "تحذير أمني مرتفع" else "تنبيه أمني"
         val body = event.reasons.joinToString(" • ").take(240)
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_notification).setContentTitle(title).setContentText(body)
+            .setSmallIcon(R.drawable.ic_notification_icon).setContentTitle(title).setContentText(body)
             .setStyle(NotificationCompat.BigTextStyle().bigText("\${event.url}\\n$body"))
             .setPriority(NotificationCompat.PRIORITY_HIGH).setAutoCancel(true).build()
         NotificationManagerCompat.from(context).notify((event.timestamp % Int.MAX_VALUE).toInt(), notification)
