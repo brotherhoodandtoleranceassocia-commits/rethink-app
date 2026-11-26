@@ -10,13 +10,13 @@
     <string name="title_proc" translatable="false">Proc</string>
     <string name="pause_title_desc" translatable="true">taking a nap…</string>
     <string name="settings_title_desc" translatable="true">A highly customizable DNS and Firewall</string>
-    <string name="about_title_desc" translatable="true">حماية الجهاز من تهديدات الشبكة والاتصالات المشبوهة</string>
+    <string name="about_title_desc" translatable="true">Protect your device from network and connection threats</string>
 
     <string name="txt_home" translatable="true">Home</string>
 
     <string name="accessibility_service_description" translatable="true">
-        Rethink uses accessibility service to detect and firewall background applications.
-        Rethink does not collect or sell any information.
+        HARES uses Android accessibility features for app-aware firewall controls when enabled.
+        HARES does not sell your browsing or network activity.
     </string>
 
     <string name="next" translatable="true">Next</string>
