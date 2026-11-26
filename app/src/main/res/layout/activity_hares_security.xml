@@ -167,7 +167,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="محرك الجدار الناري وVPN الأصلي من Rethink مكوّن مستقل عن فحص الروابط. لا تعتبر نتيجة الفحص المحلي ضماناً لحماية الحسابات البنكية."
+            android:text="فحص الرابط لا يحل محل حماية الشبكة. فعّل حماية DNS والجدار الناري من لوحة حارس الرئيسية ووافق على اتصال VPN الذي يطلبه Android."
             android:textColor="?attr/primaryLightColorText"
             android:textSize="12sp"
             android:gravity="end" />
