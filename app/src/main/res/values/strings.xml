@@ -226,10 +226,10 @@
     <string name="numeric_seven" translatable="false">7</string>
 
     <string name="slide_2_title" translatable="true">Welcome</string>
-    <string name="slide_2_desc" translatable="true">HARES is built on Rethink DNS & Firewall to monitor network activity, filter DNS traffic, and manage app firewall rules on Android.</string>
+    <string name="slide_2_desc" translatable="true">HARES is built on Rethink DNS &amp; Firewall to monitor network activity, filter DNS traffic, and manage app firewall rules on Android.</string>
 
     <string name="slide_1_title" translatable="true">Free and Open Source</string>
-    <string name="slide_1_desc" translatable="true">HARES uses the open-source Rethink DNS & Firewall engine. Original project and licensing notices are retained.</string>
+    <string name="slide_1_desc" translatable="true">HARES uses the open-source Rethink DNS &amp; Firewall engine. Original project and licensing notices are retained.</string>
 
     <string name="wireguard_title" translatable="true">Secure Internet with WireGuard</string>
     <string name="wireguard_desc" translatable="true">Encrypt your Internet traffic with WireGuard. Choose different routes for different apps.</string>
@@ -950,7 +950,7 @@
     <string name="dc_filtering_heading" translatable="true">Filtering</string>
 
     <!-- About fragment -->
-    <string name="about_bravedns_explantion" translatable="true">HARES is built on the open-source Rethink DNS & Firewall engine to monitor app activity, filter DNS traffic, and control network access on Android. </string>
+    <string name="about_bravedns_explantion" translatable="true">HARES is built on the open-source Rethink DNS &amp; Firewall engine to monitor app activity, filter DNS traffic, and control network access on Android. </string>
     <string name="about_bravedns_whoarewe" translatable="true">Rethink is a free and open-source project, led by ex-engineers from Amazon, IBM, and Scientific Games.</string>
     <string name="about_bravedns_toreport_text" translatable="true">help &amp; feedback</string>
     <string name="about_bug_report_desc" translatable="true">email crash logs</string>
