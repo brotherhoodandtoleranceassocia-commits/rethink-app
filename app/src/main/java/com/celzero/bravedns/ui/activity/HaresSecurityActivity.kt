@@ -85,9 +85,9 @@ class HaresSecurityActivity : BaseActivity(R.layout.activity_hares_security) {
             HaresThreatEvent.Level.LOW -> 0xFF65D6A4.toInt()
         })
         resultText.text = buildString {
-            append("مستوى الخطورة: \${event.level}\\n\\n")
-            append(event.reasons.joinToString("\\n• ", prefix = "• "))
-            append("\\n\\nهذا تحليل محلي أولي، وليس شهادة سلامة.")
+            append("مستوى الخطورة: ${event.level}\n\n")
+            append(event.reasons.joinToString("\n• ", prefix = "• "))
+            append("\n\nهذا تحليل محلي أولي، وليس شهادة سلامة.")
         }
         HaresNotifications.show(this, event)
         renderHistory()
@@ -116,12 +116,12 @@ class HaresSecurityActivity : BaseActivity(R.layout.activity_hares_security) {
         val events = store.all()
         val high = events.count { it.level == HaresThreatEvent.Level.HIGH }
         val medium = events.count { it.level == HaresThreatEvent.Level.MEDIUM }
-        statsText.text = "الفحوصات: \${events.size}   •   مرتفع: $high   •   متوسط: $medium"
-        historyText.text = events.take(15).joinToString("\\n\\n") { event ->
+        statsText.text = "الفحوصات: ${events.size}   •   مرتفع: $high   •   متوسط: $medium"
+        historyText.text = events.take(15).joinToString("\n\n") { event ->
             val time = java.text.DateFormat.getDateTimeInstance(
                 java.text.DateFormat.SHORT, java.text.DateFormat.SHORT
             ).format(java.util.Date(event.timestamp))
-            "$time\\n\${event.level} — \${event.url}\\n\${event.reasons.joinToString("، ")}"
+            "$time\n${event.level} — ${event.url}\n${event.reasons.joinToString("، ")}"
         }.ifBlank { "لا توجد حوادث مسجلة حتى الآن." }
     }
 }
