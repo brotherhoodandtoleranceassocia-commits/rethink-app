@@ -24,3 +24,7 @@ HARES is the branded Android build of this fork of Rethink DNS & Firewall.
 ## Upstream attribution
 
 This project is based on the upstream Rethink DNS & Firewall project by Celzero and retains its Apache-2.0 licensing and notices. The HARES-specific code is an additional layer; it does not replace or claim authorship of the upstream VPN/firewall engine.
+
+## Build the installable APK
+
+The repository includes an Android CI workflow that runs lint, HARES URL scanner regression tests, and builds a universal debug APK artifact named `HARES-ANDROID-UNIVERSAL-APK`. GitHub may require the repository owner to enable Actions for a newly created fork before the first workflow run. The artifact is intended for device testing; a stable production signing key must be configured before distributing upgradeable release builds.
