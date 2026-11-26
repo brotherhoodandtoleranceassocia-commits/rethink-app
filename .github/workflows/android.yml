@@ -9,6 +9,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     env:
       VARIANT: assembleWebsiteFullDebug
     steps:
@@ -40,6 +41,8 @@ jobs:
       if: success()
       run: |
         ./gradlew lint
+        TEST_VARIANT="${VARIANT/assemble/test}UnitTest"
+        ./gradlew "$TEST_VARIANT"
         ./gradlew \
           ${VARIANT} \
           --info \
