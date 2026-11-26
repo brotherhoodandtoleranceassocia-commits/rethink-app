@@ -79,6 +79,7 @@ import com.celzero.bravedns.databinding.FragmentHomeScreenBinding
 import com.celzero.bravedns.databinding.ItemHomeFirewallRulesPageBinding
 import com.celzero.bravedns.databinding.ViewHomeLogsActivityBinding
 import com.celzero.bravedns.databinding.ViewHomeLogsAppsBinding
+import com.celzero.bravedns.ui.activity.HaresSecurityActivity
 import com.celzero.bravedns.net.doh.Transaction
 import com.celzero.bravedns.rpnproxy.RpnProxyManager
 import com.celzero.bravedns.rpnproxy.RpnProxyManager.AUTO_SERVER_ID
@@ -463,7 +464,7 @@ class HomeScreenFragment : Fragment(R.layout.fragment_home_screen) {
 
     private fun initializeClickListeners() {
         setupFirewallRulesCard()
-        b.haresSecurityShortcut.setOnClickListener {
+        b.haresSecurityShortcut?.setOnClickListener {
             startActivity(Intent(requireContext(), HaresSecurityActivity::class.java))
         }
 
