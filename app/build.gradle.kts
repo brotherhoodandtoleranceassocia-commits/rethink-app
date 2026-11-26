@@ -276,7 +276,7 @@ android {
             }
             signingConfig = signingConfigs.getByName("alpha")
                 .takeIf { !System.getenv("ALPHA_KS_FILE").isNullOrEmpty() }
-            resValue("string", "app_name", "Rethink(α)")
+            resValue("string", "app_name", "HARES α")
         }
         register("releaseDebug") {
             initWith(getByName("release"))
