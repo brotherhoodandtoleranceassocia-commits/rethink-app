@@ -1,14 +1,17 @@
 package com.celzero.bravedns.hares
 import android.Manifest
 import android.app.NotificationChannel
+import android.app.PendingIntent
 import android.app.NotificationManager
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.celzero.bravedns.R
+import com.celzero.bravedns.ui.activity.HaresSecurityActivity
 
 object HaresNotifications {
     private const val CHANNEL_ID = "hares_security_alerts"
@@ -20,10 +23,24 @@ object HaresNotifications {
             NotificationChannel(CHANNEL_ID, "تنبيهات حارس الأمنية", NotificationManager.IMPORTANCE_HIGH))
         val title = if (event.level == HaresThreatEvent.Level.HIGH) "تحذير أمني مرتفع" else "تنبيه أمني"
         val body = event.reasons.joinToString(" • ").take(240)
+        val openHares = Intent(context, HaresSecurityActivity::class.java).apply {
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        }
+        val pendingIntent = PendingIntent.getActivity(
+            context,
+            (event.timestamp % Int.MAX_VALUE).toInt(),
+            openHares,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_notification_icon).setContentTitle(title).setContentText(body)
+            .setSmallIcon(R.drawable.ic_notification_icon)
+            .setContentTitle(title)
+            .setContentText(body)
             .setStyle(NotificationCompat.BigTextStyle().bigText("${event.url}\n$body"))
-            .setPriority(NotificationCompat.PRIORITY_HIGH).setAutoCancel(true).build()
+            .setContentIntent(pendingIntent)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setAutoCancel(true)
+            .build()
         NotificationManagerCompat.from(context).notify((event.timestamp % Int.MAX_VALUE).toInt(), notification)
     }
 }
