@@ -73,6 +73,7 @@ import com.celzero.bravedns.sponsor.repository.SponsorRepository
 import com.celzero.bravedns.ui.HomeScreenActivity
 import com.celzero.bravedns.ui.activity.ConsoleLogActivity
 import com.celzero.bravedns.ui.activity.EventsActivity
+import com.celzero.bravedns.ui.activity.HaresSecurityActivity
 import com.celzero.bravedns.ui.activity.FragmentHostActivity
 import com.celzero.bravedns.ui.bottomsheet.BugReportFilesBottomSheet
 import com.celzero.bravedns.util.Constants.Companion.INIT_TIME_MS
@@ -246,6 +247,9 @@ class AboutFragment : Fragment(R.layout.fragment_about), View.OnClickListener, K
         b.aboutStats.text = getString(R.string.settings_general_header).replaceFirstChar(Char::titlecase)
 
         b.fhsTitleRethink.setOnClickListener(this)
+        b.root.findViewById<View>(R.id.hares_security_center).setOnClickListener {
+            startActivity(Intent(requireContext(), HaresSecurityActivity::class.java))
+        }
         b.aboutSponsor.setOnClickListener(this)
         b.aboutSponsorAgain.setOnClickListener(this)
         b.aboutManageRpn.setOnClickListener(this)
