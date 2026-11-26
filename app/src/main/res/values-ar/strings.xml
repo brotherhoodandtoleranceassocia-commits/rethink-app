@@ -592,11 +592,11 @@
     <string name="next">التالي</string>
     <string name="slide_2_title">أهلاً وسهلاً</string>
     <string name="block">احظر</string>
-    <string name="slide_1_desc">يعتمد حارس على محرك Rethink DNS & Firewall مفتوح المصدر، مع الاحتفاظ بإشعارات الترخيص وحقوق المشروع الأصلي.</string>
+    <string name="slide_1_desc">يعتمد حارس على محرك Rethink DNS &amp; Firewall مفتوح المصدر، مع الاحتفاظ بإشعارات الترخيص وحقوق المشروع الأصلي.</string>
     <string name="notification_content" description="Indicates what will happen if the user taps the notification.">انقر لتغيير إعداد الحماية</string>
     <string name="status_no_internet">لا يوجد إنترنت</string>
     <string name="orbot_bs_status_1">إعادة توجيه %1$s اتصالات إلى Orbot.</string>
-    <string name="slide_2_desc">يعتمد حارس على محرك Rethink DNS & Firewall لمراقبة نشاط الشبكة وتصفية DNS وإدارة قواعد جدار الحماية على Android.</string>
+    <string name="slide_2_desc">يعتمد حارس على محرك Rethink DNS &amp; Firewall لمراقبة نشاط الشبكة وتصفية DNS وإدارة قواعد جدار الحماية على Android.</string>
     <string name="rdns_plus" translatable="false">RDNS Plus</string>
     <string name="pause_mode_notification_title">مُلبث! سيستمر منع اتصال التطبيقات المحظورة.</string>
     <string name="status_protected_with_proxy_private_dns">محمي بواسطة وكيل و dns خاص</string>
@@ -647,7 +647,7 @@
     <string name="orbot_explanation">Orbot هو تطبيق بروكسي مجاني يمكّن التطبيقات الأخرى من استخدام الإنترنت بشكل أكثر &lt;u&gt;أمانًا&lt;/u&gt;. \nOrbot يستخدم &lt;u&gt;Tor&lt;/u&gt; لتشفير حركة مرور الإنترنت الخاصة بك مما يساعدك على &lt;u&gt;تجاوز الرقابة&lt;/u&gt; والدفاع ضد أشكال &lt;u&gt;مراقبة الشبكة&lt;/u&gt; التي تهدد الحرية الشخصية والخصوصية. \n&lt;u&gt;TCP وكيل&lt;/u&gt;: يقوم Rethink بإعادة توجيه اتصالات TCP للتطبيقات &lt;i&gt;المضمنة&lt;/i&gt; إلى Orbot. \n&lt;u&gt;HTTP وكيل&lt;/u&gt;:يقوم Rethink &lt;i&gt;بإنشاء&lt;/i&gt; نفقHTTP CONNECT إلى Orbot وإعادة توجيه اتصالات TCPفقط للتطبيقات &lt;i&gt;المضمنة&lt;/i&gt; .</string>
     <string name="settings_orbot_disabled_error">قم بإيقاف تشغيل HTTP (S) و / أو وكيل SOCKS5 لمتابعة إعداد Tor-as-a-proxy.</string>
     <string name="settings_import_export_heading">النسخ الاحتياطي والاستعادة</string>
-    <string name="about_bravedns_explantion">حارس مبني على محرك Rethink DNS & Firewall مفتوح المصدر لمراقبة نشاط التطبيقات وتصفية DNS والتحكم في اتصالات الشبكة على Android.</string>
+    <string name="about_bravedns_explantion">حارس مبني على محرك Rethink DNS &amp; Firewall مفتوح المصدر لمراقبة نشاط التطبيقات وتصفية DNS والتحكم في اتصالات الشبكة على Android.</string>
     <string name="cd_dns_crypt_relay_name">DNSRelay %1$s</string>
     <string name="cd_dns_crypt_error_text_1">لا يمكن أن يكون الختم فارغًا</string>
     <string name="settings_socks5_vpn_disabled_error">ابدأ Rethink للمتابعة.</string>
