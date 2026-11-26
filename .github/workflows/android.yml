@@ -38,16 +38,42 @@ jobs:
         fi
       env:
         GSCV_TEST_JSON: ${{ secrets.GOOGLE_SERVICES_TEST_JSON }}
-    - name: 🧹 Android lint
-      if: success()
-      run: ./gradlew lint
-    - name: 🚂 Assemble installable HARES APK
+    - name: 🧹 Android lint (retry transient Maven rate limits)
       if: success()
       run: |
-        ./gradlew \
-          ${VARIANT} \
-          --info \
-          --warning-mode all
+        set -euo pipefail
+        for attempt in 1 2 3 4; do
+          if ./gradlew lint --no-configuration-cache; then
+            exit 0
+          fi
+          if [ "$attempt" -eq 4 ]; then
+            echo "Android lint failed after 4 attempts."
+            exit 1
+          fi
+          delay=$((attempt * 30))
+          echo "Gradle dependency resolution/build failed; retrying in ${delay}s (attempt $((attempt + 1))/4)."
+          sleep "$delay"
+        done
+    - name: 🚂 Assemble installable HARES APK (retry transient Maven rate limits)
+      if: success()
+      run: |
+        set -euo pipefail
+        for attempt in 1 2 3 4; do
+          if ./gradlew \
+            ${VARIANT} \
+            --info \
+            --warning-mode all \
+            --no-configuration-cache; then
+            exit 0
+          fi
+          if [ "$attempt" -eq 4 ]; then
+            echo "APK assembly failed after 4 attempts."
+            exit 1
+          fi
+          delay=$((attempt * 30))
+          echo "Gradle dependency resolution/build failed; retrying in ${delay}s (attempt $((attempt + 1))/4)."
+          sleep "$delay"
+        done
     - name: 📦 Upload installable HARES universal APK
       if: success()
       uses: actions/upload-artifact@v4
