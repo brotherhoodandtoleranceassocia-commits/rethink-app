@@ -34,10 +34,18 @@ jobs:
           set -euo pipefail
           chmod +x ./gradlew
           ./gradlew assembleFdroidFullRelease -PwebsiteDegoogled=true --no-configuration-cache --stacktrace
-          APK="$(find app/build/outputs/apk/fdroid/full/release -maxdepth 1 -type f -name '*universal*.apk' -print -quit)"
+          AAPT="$(find "$ANDROID_HOME/build-tools" -type f -name aapt | sort -V | tail -n 1)"
+          test -x "$AAPT"
+          APK=""
+          while IFS= read -r candidate; do
+            if "$AAPT" dump badging "$candidate" 2>/dev/null | grep -Fq "package: name='com.hares.security'"; then
+              APK="$candidate"
+              case "$candidate" in *universal*.apk) break ;; esac
+            fi
+          done < <(find app/build/outputs -type f -name '*.apk' -print)
           if [ -z "$APK" ]; then
-            echo "::error::Universal HARES phone APK was not generated"
-            find app/build/outputs/apk -type f -name '*.apk' -print
+            echo "::error::No APK with package com.hares.security was found"
+            find app/build/outputs -type f -print
             exit 1
           fi
           mkdir -p release-output
