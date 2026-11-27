@@ -1,4 +1,4 @@
-name: HARES Android Production Release
+name: HARES Android Release (no signing secrets)
 
 on:
   workflow_dispatch:
@@ -10,8 +10,8 @@ permissions:
   contents: read
 
 jobs:
-  release:
-    name: Build signed HARES phone APK
+  build:
+    name: Build HARES phone APK without repository secrets
     runs-on: ubuntu-latest
     timeout-minutes: 90
     steps:
@@ -25,58 +25,40 @@ jobs:
           java-version: '17'
           cache: gradle
 
-      - name: Validate signing secrets
-        env:
-          KEYSTORE_B64: ${{ secrets.HARES_RELEASE_KEYSTORE_BASE64 }}
-          KEY_ALIAS: ${{ secrets.HARES_RELEASE_KEY_ALIAS }}
-          PASSWORD: ${{ secrets.HARES_RELEASE_PASSWORD }}
-        run: |
-          set -euo pipefail
-          for name in KEYSTORE_B64 KEY_ALIAS PASSWORD; do
-            if [ -z "${!name}" ]; then
-              echo "::error::Missing GitHub Actions secret: HARES_RELEASE_${name}"
-              exit 1
-            fi
-          done
-          mkdir -p "$RUNNER_TEMP/hares-signing"
-          printf '%s' "$KEYSTORE_B64" | base64 --decode > "$RUNNER_TEMP/hares-signing/release.jks"
-          test -s "$RUNNER_TEMP/hares-signing/release.jks"
-          keytool -list -keystore "$RUNNER_TEMP/hares-signing/release.jks" -storepass "$PASSWORD" -alias "$KEY_ALIAS" >/dev/null
-
-      - name: Build optimized production APK
-        env:
-          IZZYONDROID_KS_ALIAS: ${{ secrets.HARES_RELEASE_KEY_ALIAS }}
-          IZZYONDROID_KS_PASSWORD: ${{ secrets.HARES_RELEASE_PASSWORD }}
-          IZZYONDROID_KS_FILE: ${{ runner.temp }}/hares-signing/release.jks
-          VERSION_CODE: ${{ vars.HARES_VERSION_CODE || '75' }}
+      - name: Build optimized Android release APK (unsigned)
         run: |
           set -euo pipefail
           chmod +x ./gradlew
           ./gradlew assembleFdroidFullRelease -PwebsiteDegoogled=true --no-configuration-cache --stacktrace
           APK="$(find app/build/outputs/apk/fdroid/full/release -maxdepth 1 -type f -name '*universal*.apk' -print -quit)"
           if [ -z "$APK" ]; then
-            echo "::error::Universal production APK was not generated"
+            echo "::error::Universal HARES APK was not generated"
             find app/build/outputs/apk -type f -name '*.apk' -print
             exit 1
           fi
-          mkdir -p production-output
-          cp "$APK" production-output/HARES-Android-Production-Universal.apk
-          echo "APK_PATH=production-output/HARES-Android-Production-Universal.apk" >> "$GITHUB_ENV"
+          mkdir -p release-output
+          cp "$APK" release-output/HARES-Android-Release-UNSIGNED.apk
+          echo "APK_PATH=release-output/HARES-Android-Release-UNSIGNED.apk" >> "$GITHUB_ENV"
 
-      - name: Verify APK signature and package
+      - name: Verify APK package and confirm unsigned status
         run: |
           set -euo pipefail
-          APKSIGNER="$(find "$ANDROID_HOME/build-tools" -type f -name apksigner | sort -V | tail -n 1)"
           AAPT="$(find "$ANDROID_HOME/build-tools" -type f -name aapt | sort -V | tail -n 1)"
-          test -x "$APKSIGNER"
+          APKSIGNER="$(find "$ANDROID_HOME/build-tools" -type f -name apksigner | sort -V | tail -n 1)"
           test -x "$AAPT"
-          "$APKSIGNER" verify --verbose --print-certs "$APK_PATH"
-          "$AAPT" dump badging "$APK_PATH" | grep -E "package: name='com.hares.security'"
+          test -x "$APKSIGNER"
+          "$AAPT" dump badging "$APK_PATH" | grep -F "package: name='com.hares.security'"
+          if "$APKSIGNER" verify "$APK_PATH" >/dev/null 2>&1; then
+            echo "::error::Expected an unsigned APK, but a signature was detected"
+            exit 1
+          fi
+          echo "Verified: APK package is HARES and the APK is intentionally unsigned."
+          echo "::warning::Unsigned APK cannot be installed on Android. A permanent signing key is required for an installable release."
 
-      - name: Publish signed production APK
+      - name: Publish unsigned release build
         uses: actions/upload-artifact@v4
         with:
-          name: HARES-Android-Production-Release
-          path: production-output/HARES-Android-Production-Universal.apk
+          name: HARES-Android-Release-UNSIGNED
+          path: release-output/HARES-Android-Release-UNSIGNED.apk
           if-no-files-found: error
           retention-days: 30
