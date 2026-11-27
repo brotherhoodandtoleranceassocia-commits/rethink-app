@@ -1,8 +1,10 @@
-name: HARES Android Release (no signing secrets)
+name: HARES Android Release (ephemeral signing, no secrets)
 
 on:
   workflow_dispatch:
   push:
+    branches:
+      - main
     tags:
       - "hares-v*"
 
@@ -11,7 +13,7 @@ permissions:
 
 jobs:
   build:
-    name: Build HARES phone APK without repository secrets
+    name: Build and sign HARES Android phone APK
     runs-on: ubuntu-latest
     timeout-minutes: 90
     steps:
@@ -25,40 +27,66 @@ jobs:
           java-version: '17'
           cache: gradle
 
-      - name: Build optimized Android release APK (unsigned)
+      - name: Build optimized Android phone release
+        env:
+          VERSION_CODE: '75'
         run: |
           set -euo pipefail
           chmod +x ./gradlew
           ./gradlew assembleFdroidFullRelease -PwebsiteDegoogled=true --no-configuration-cache --stacktrace
           APK="$(find app/build/outputs/apk/fdroid/full/release -maxdepth 1 -type f -name '*universal*.apk' -print -quit)"
           if [ -z "$APK" ]; then
-            echo "::error::Universal HARES APK was not generated"
+            echo "::error::Universal HARES phone APK was not generated"
             find app/build/outputs/apk -type f -name '*.apk' -print
             exit 1
           fi
           mkdir -p release-output
-          cp "$APK" release-output/HARES-Android-Release-UNSIGNED.apk
-          echo "APK_PATH=release-output/HARES-Android-Release-UNSIGNED.apk" >> "$GITHUB_ENV"
+          cp "$APK" release-output/HARES-Android-Release-unsigned.apk
+          echo "APK_PATH=release-output/HARES-Android-Release-unsigned.apk" >> "$GITHUB_ENV"
 
-      - name: Verify APK package and confirm unsigned status
+      - name: Create one-time signing key (no repository secrets)
         run: |
           set -euo pipefail
-          AAPT="$(find "$ANDROID_HOME/build-tools" -type f -name aapt | sort -V | tail -n 1)"
-          APKSIGNER="$(find "$ANDROID_HOME/build-tools" -type f -name apksigner | sort -V | tail -n 1)"
-          test -x "$AAPT"
-          test -x "$APKSIGNER"
-          "$AAPT" dump badging "$APK_PATH" | grep -F "package: name='com.hares.security'"
-          if "$APKSIGNER" verify "$APK_PATH" >/dev/null 2>&1; then
-            echo "::error::Expected an unsigned APK, but a signature was detected"
-            exit 1
-          fi
-          echo "Verified: APK package is HARES and the APK is intentionally unsigned."
-          echo "::warning::Unsigned APK cannot be installed on Android. A permanent signing key is required for an installable release."
+          STORE_PASS="$(openssl rand -hex 24)"
+          keytool -genkeypair -v \
+            -keystore "$RUNNER_TEMP/hares-one-time.jks" \
+            -storepass "$STORE_PASS" -keypass "$STORE_PASS" \
+            -alias hares-one-time \
+            -keyalg RSA -keysize 3072 -validity 10000 \
+            -dname "CN=HARES Android Release, OU=HARES, O=HARES, C=JO"
+          echo "::add-mask::$STORE_PASS"
+          echo "HARES_SIGNING_PASSWORD=$STORE_PASS" >> "$GITHUB_ENV"
+          echo "HARES_KEYSTORE=$RUNNER_TEMP/hares-one-time.jks" >> "$GITHUB_ENV"
 
-      - name: Publish unsigned release build
+      - name: Align and sign APK
+        run: |
+          set -euo pipefail
+          BUILD_TOOLS="$(dirname "$(find "$ANDROID_HOME/build-tools" -type f -name apksigner | sort -V | tail -n 1)")"
+          "$BUILD_TOOLS/zipalign" -f -v 4 "$APK_PATH" release-output/HARES-Android-Release-aligned.apk
+          "$BUILD_TOOLS/apksigner" sign \
+            --ks "$HARES_KEYSTORE" \
+            --ks-key-alias hares-one-time \
+            --ks-pass "pass:$HARES_SIGNING_PASSWORD" \
+            --key-pass "pass:$HARES_SIGNING_PASSWORD" \
+            --out release-output/HARES-Android-Release.apk \
+            release-output/HARES-Android-Release-aligned.apk
+          rm -f release-output/HARES-Android-Release-unsigned.apk release-output/HARES-Android-Release-aligned.apk
+
+      - name: Verify signed APK and package identity
+        run: |
+          set -euo pipefail
+          BUILD_TOOLS="$(dirname "$(find "$ANDROID_HOME/build-tools" -type f -name apksigner | sort -V | tail -n 1)")"
+          AAPT="$BUILD_TOOLS/aapt"
+          "$BUILD_TOOLS/apksigner" verify --verbose --print-certs release-output/HARES-Android-Release.apk
+          "$AAPT" dump badging release-output/HARES-Android-Release.apk | grep -F "package: name='com.hares.security'"
+          sha256sum release-output/HARES-Android-Release.apk | tee release-output/SHA256SUMS.txt
+
+      - name: Publish installable one-time-signed APK
         uses: actions/upload-artifact@v4
         with:
-          name: HARES-Android-Release-UNSIGNED
-          path: release-output/HARES-Android-Release-UNSIGNED.apk
+          name: HARES-Android-Release
+          path: |
+            release-output/HARES-Android-Release.apk
+            release-output/SHA256SUMS.txt
           if-no-files-found: error
           retention-days: 30
